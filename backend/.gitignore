@@ -1,0 +1,5 @@
+.env
+logs.txt
+logs*.txt
+node_modules/
+uploads/
