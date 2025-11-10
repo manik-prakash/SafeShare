@@ -29,15 +29,6 @@
         <input type="password" id="password" required minlength="6">
       </div>
       
-      <div class="form-group">
-        <label for="role">Role:</label>
-        <select id="role">
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-          <option value="guest">Guest</option>
-        </select>
-      </div>
-      
       <button type="submit">Register</button>
     </form>
     
@@ -56,7 +47,7 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const role = document.getElementById('role').value;
-      
+      role = "user";
       try {
         const response = await fetch(`${API_URL}/auth/register`, {
           method: 'POST',

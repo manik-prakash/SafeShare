@@ -107,7 +107,7 @@
         filesList.innerHTML = '<p style="text-align: center; color: #999;">No files uploaded yet</p>';
         return;
       }
-
+      console.log(user.role);
       filesList.innerHTML = files.map(file => `
         <div class="file-item">
           <div class="file-info">
