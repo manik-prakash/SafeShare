@@ -6,7 +6,6 @@ const { log } = require('../utils/logger');
 
 const router = express.Router();
 
-// Input validation and sanitization
 const registerValidation = [
   body('username').trim().isLength({ min: 3 }).escape(),
   body('email').isEmail().normalizeEmail(),
@@ -18,7 +17,6 @@ const loginValidation = [
   body('password').notEmpty()
 ];
 
-// Register new user
 router.post('/register', registerValidation, async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -28,14 +26,12 @@ router.post('/register', registerValidation, async (req, res) => {
 
     const { username, email, password, role } = req.body;
 
-    // Check if user exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       log(`Registration failed: User already exists (${email})`, 'WARN');
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Create new user
     const user = new User({
       username,
       email,
@@ -66,7 +62,6 @@ router.post('/register', registerValidation, async (req, res) => {
   }
 });
 
-// Login user
 router.post('/login', loginValidation, async (req, res) => {
   try {
     const errors = validationResult(req);

@@ -10,15 +10,13 @@ const { log } = require('../utils/logger');
 const User = require('../models/User');
 const router = express.Router();
 
-// Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024 
   },
   fileFilter: (req, file, cb) => {
-    // Allowed file types
     const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx|txt|zip/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
@@ -31,22 +29,19 @@ const upload = multer({
   }
 });
 
-// Upload file
 router.post('/upload', auth, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    // Encrypt file
     const encryptedFile = encrypt(req.file.buffer);
     const encryptedFileName = `${Date.now()}-${req.file.originalname}`;
     const uploadPath = path.join(__dirname, '../uploads', encryptedFileName);
 
-    // Save encrypted file
+
     fs.writeFileSync(uploadPath, JSON.stringify(encryptedFile));
 
-    // Save file metadata to database
     const file = new File({
       filename: req.file.originalname,
       originalName: req.file.originalname,
@@ -74,7 +69,6 @@ router.post('/upload', auth, upload.single('file'), async (req, res) => {
   }
 });
 
-// Get all files for current user
 router.get('/my-files', auth, async (req, res) => {
   try {
     const files = await File.find({
@@ -93,7 +87,6 @@ router.get('/my-files', auth, async (req, res) => {
   }
 });
 
-// Download file
 router.get('/download/:id', auth, async (req, res) => {
   try {
     const file = await File.findById(req.params.id);
@@ -102,7 +95,6 @@ router.get('/download/:id', auth, async (req, res) => {
       return res.status(404).json({ error: 'File not found' });
     }
 
-    // Check permissions
     const isOwner = file.owner.toString() === req.user._id.toString();
     const isShared = file.sharedWith.some(
       share => share.user.toString() === req.user._id.toString()
@@ -114,7 +106,6 @@ router.get('/download/:id', auth, async (req, res) => {
       return res.status(403).json({ error: 'Access denied' });
     }
 
-    // Read and decrypt file
     const filePath = path.join(__dirname, '../uploads', file.encryptedName);
     const encryptedData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const decryptedBuffer = decrypt(encryptedData);
@@ -130,7 +121,6 @@ router.get('/download/:id', auth, async (req, res) => {
   }
 });
 
-// Share file with another user
 router.post('/share/:id', auth, async (req, res) => {
   try {
     const { userEmail, permission } = req.body;
@@ -149,7 +139,6 @@ router.post('/share/:id', auth, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Add to shared list if not already shared
     const alreadyShared = file.sharedWith.some(
       share => share.user.toString() === shareWithUser._id.toString()
     );
@@ -171,7 +160,6 @@ router.post('/share/:id', auth, async (req, res) => {
   }
 });
 
-// Delete file (admin or owner only)
 router.delete('/delete/:id', auth, async (req, res) => {
   try {
     const file = await File.findById(req.params.id);
@@ -187,13 +175,11 @@ router.delete('/delete/:id', auth, async (req, res) => {
       return res.status(403).json({ error: 'Access denied' });
     }
 
-    // Delete physical file
     const filePath = path.join(__dirname, '../uploads', file.encryptedName);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
 
-    // Delete from database
     await File.findByIdAndDelete(req.params.id);
 
     log(`File deleted: ${file.filename} by ${req.user.username}`, 'INFO');
@@ -205,7 +191,6 @@ router.delete('/delete/:id', auth, async (req, res) => {
   }
 });
 
-// Admin route - get all files
 router.get('/admin/all-files', auth, checkRole('admin'), async (req, res) => {
   try {
     const files = await File.find().populate('owner', 'username email');

@@ -1,6 +1,5 @@
 const { log } = require('../utils/logger');
 
-// Role-based access control middleware
 const checkRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
