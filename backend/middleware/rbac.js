@@ -1,4 +1,4 @@
-const { log } = require('../utils/logger');
+const log = require('../utils/logger');
 
 const checkRole = (...allowedRoles) => {
   return (req, res, next) => {
@@ -16,4 +16,4 @@ const checkRole = (...allowedRoles) => {
   };
 };
 
-module.exports = { checkRole };
+module.exports = checkRole;

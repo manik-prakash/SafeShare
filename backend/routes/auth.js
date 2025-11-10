@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
-const { log } = require('../utils/logger');
+const log = require('../utils/logger');
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.post('/register', registerValidation, async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
+    
     const { username, email, password, role } = req.body;
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });

@@ -14,4 +14,4 @@ function log(message, level = 'INFO') {
   });
 }
 
-module.exports = { log };
+module.exports =  log ;

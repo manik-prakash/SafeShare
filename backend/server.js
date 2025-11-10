@@ -8,7 +8,8 @@ const fs = require('fs');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const fileRoutes = require('./routes/files');
-const { log } = require('./utils/logger');
+const adminRoutes = require('./routes/admin');
+const log = require('./utils/logger');
 
 const app = express();
 
@@ -21,7 +22,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 app.use(helmet()); 
 app.use(cors({
-  origin: '*',
+  origin: ['http://localhost:3000'],
   credentials: true
 }));
 
@@ -36,10 +37,10 @@ app.use('/api/', limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/files', fileRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date() });

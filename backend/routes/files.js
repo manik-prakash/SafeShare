@@ -4,9 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const File = require('../models/File');
 const auth = require('../middleware/auth');
-const { checkRole } = require('../middleware/rbac');
 const { encrypt, decrypt } = require('../utils/encryption');
-const { log } = require('../utils/logger');
+const log = require('../utils/logger');
 const User = require('../models/User');
 const router = express.Router();
 
@@ -188,17 +187,6 @@ router.delete('/delete/:id', auth, async (req, res) => {
   } catch (error) {
     log(`File deletion error: ${error.message}`, 'ERROR');
     res.status(500).json({ error: 'Error deleting file' });
-  }
-});
-
-router.get('/admin/all-files', auth, checkRole('admin'), async (req, res) => {
-  try {
-    const files = await File.find().populate('owner', 'username email');
-    log(`Admin ${req.user.username} accessed all files`, 'INFO');
-    res.json({ files });
-  } catch (error) {
-    log(`Admin file retrieval error: ${error.message}`, 'ERROR');
-    res.status(500).json({ error: 'Error retrieving files' });
   }
 });
 
