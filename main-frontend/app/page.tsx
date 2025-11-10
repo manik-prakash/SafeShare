@@ -1,16 +1,15 @@
 "use client"
 import Link from "next/link"
-import { Lock, Shield, Key, Eye, CheckCircle2 } from "lucide-react"
+import { Lock, Shield, Key, CheckCircle2 } from "lucide-react"
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-linear-to-br from-background via-background to-muted">
-      {/* Navigation */}
       <nav className="border-b border-border bg-card/50 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Lock className="w-6 h-6 text-primary" />
-            <span className="text-xl font-bold text-foreground">SecureVault</span>
+            <span className="text-xl font-bold text-foreground">SafeShare</span>
           </div>
           <div className="flex gap-3">
             <Link href="/auth/login">
@@ -25,7 +24,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero */}
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center space-y-8">
           <div>
@@ -49,7 +48,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mt-20">
           <div className="p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors">
             <Shield className="w-10 h-10 text-primary mb-4" />
@@ -78,7 +76,7 @@ export default function Home() {
           <div className="p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors">
             <Lock className="w-10 h-10 text-primary mb-4" />
             <h3 className="font-semibold text-lg mb-2">File Sharing</h3>
-            <p className="text-muted-foreground">Securely share files with granular permissions</p>
+            <p className="text-muted-foreground">Securely share files</p>
           </div>
         </div>
       </div>

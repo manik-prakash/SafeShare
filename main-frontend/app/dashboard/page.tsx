@@ -220,10 +220,9 @@ export default function DashboardPage() {
         {alert && <Alert message={alert.message} type={alert.type} />}
 
         <div className="space-y-8">
-          {/* Upload Section */}
+
           <FileUpload fileInputRef={fileInputRef} onFileSelect={handleFileSelect} />
 
-          {/* Files List */}
           <div>
             <h2 className="text-2xl font-bold text-foreground mb-6">Your Files</h2>
             {files.length === 0 ? (
